@@ -1,0 +1,29 @@
+[Unit]
+Description=K7C steel ball tracker, UART and AP video server
+Wants=NetworkManager.service
+After=NetworkManager.service systemd-udev-settle.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/userdata/project
+Environment=PYTHONUNBUFFERED=1
+ExecStartPre=/usr/bin/python3 /userdata/project/deploy/k7c_ball_autostart.py ensure-ap
+ExecStartPre=/bin/sleep 2
+ExecStartPre=/usr/bin/test -e /dev/video73
+ExecStartPre=/usr/bin/test -e /dev/ttyS8
+ExecStart=/venv/bin/python3 /userdata/project/grayscale_ball_tracker_rk3576.py --camera 73 --width 640 --height 480 --fps 30 --search-x-min 95 --search-x-max 505 --centerline-y 27 --stream --port 8081 --stream-fps 20 --stream-width 1024 --jpeg-quality 80 --record-dir /userdata/recordings --uart --uart-port /dev/ttyS8 --uart-baud 115200 --log-every 30
+Restart=always
+RestartSec=3
+KillSignal=SIGINT
+TimeoutStopSec=15
+Nice=-5
+OOMScoreAdjust=-200
+LimitNOFILE=4096
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

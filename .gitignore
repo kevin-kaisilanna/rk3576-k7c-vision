@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 运行产物与大体积媒体（原始数据保留在本地，不入库）
+*.log
+*.mp4
+*.avi
+*.mov
+*.npy
+*.elf
+canmv-frame-*.png
+
+# 网页录像输出
+recordings/
